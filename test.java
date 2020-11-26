@@ -2,7 +2,7 @@ import java.util.*;
 class test{
     static int[] pos(String move,String pla,String [][]board){
         String chara=move.charAt(0)+""+move.charAt(1)+" "+pla;
-        System.out.println(chara);
+        //System.out.println(chara);
         int []position=new int[2];
         for(int i=0;i<5;i++){
             for(int j=0;j<5;j++){
