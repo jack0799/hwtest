@@ -1,13 +1,28 @@
 import java.util.*;
 class test{
-    static int[][] pos(String move){
-        position[0][0]=1;
-        position[0][1]=1;
+    static int[] pos(String move,String pla,String [][]board){
+        String chara=move.charAt(0)+""+move.charAt(1)+pla;
+        int []position=new int[2];
+        for(int i=0;i<5;i++){
+            for(int j=0;j<5;j++){
+                if(board[i][j].equals(chara)){
+                    position[0]=i;
+                    position[1]=j;
+                    break;
+
+                }
+            }
+        }
+        
         return position;
     }
     public static void main(String args[]){
         Scanner sc=new Scanner(System.in);
         String [][]board=new String[5][5];
+        for(int i=0;i<5;i++){
+            for(int j=0;j<5;j++)
+            board[i][j]="0000";
+        }
         ArrayList<String> Aposs= new ArrayList<String>(); 
         ArrayList<String> Bposs= new ArrayList<String>(); 
 
@@ -42,39 +57,58 @@ class test{
             if(chance==1){
                 System.out.println("Player 1 enter your move");
                 String move=sc.next();
-                String a=move.charAt(3);
-                int [][]position=new int[0][1];
-                position=pos(move);
-                if(a=="R"){
-                    if(position[0][1]==4){
+                
+                if(!Aposs.contains(move.charAt(0)+""+move.charAt(1)+" A")){
+                    //System.out.println(move.charAt(0)+""+move.charAt(1)+" A");
+                    System.out.println("Character Dead");
+                    continue;
+                }
+                char a=move.charAt(3);
+                int []position=new int[2];
+                position=pos(move,"A",board);
+                if(a=='L'){
+                    if(position[1]==4){
                         System.out.println("Cannot move to right as it is outside the board");
                         continue;
                     }
-                    if(board[position[0][0]][position[0][1]+1].charAt(3)=='A'){
+                    if(board[position[0]][position[1]+1].charAt(3)=='A'){
                         System.out.println("Cannot move to right as your character is already there");
                         continue;
                     }
-                    else if(board[position[0][0]][position[0][1]+1].charAt(3)=='B'){
+                    else if(board[position[0]][position[1]+1].charAt(3)=='B'){
                         Bpoints--;
-                        board[position[0][0]][position[0][1]+1]=move.charAt(0)+move.charAt(1)+" A";
+                        Bposs.remove(board[position[0]][position[1]+1]);
+                        board[position[0]][position[1]+1]=move.charAt(0)+""+move.charAt(1)+" A";
+                        board[position[0]][position[1]]="0000";
+                    }
+                    else if(board[position[0]][position[1]+1]=="0000"){
+                        
+                        board[position[0]][position[1]+1]=move.charAt(0)+""+move.charAt(1)+" A";
+                        board[position[0]][position[1]]="0000";
                     }
                     else{
                         System.out.println("Please enter properly");
                         continue;
                     }
                 }
-                else if(a=="L"){
-                    if(position[0][1]==0){
+                else if(a=='R'){
+                    if(position[1]==0){
                         System.out.println("Cannot move to left as it is outside the board");
                         continue;
                     }
-                    if(board[position[0][0]][position[0][1]-1].charAt(3)=='A'){
+                    if(board[position[0]][position[1]-1].charAt(3)=='A'){
                         System.out.println("Cannot move to left as your character is already there");
                         continue;
                     }
-                    else if(board[position[0][0]][position[0][1]-1].charAt(3)=='B'){
+                    else if(board[position[0]][position[1]-1].charAt(3)=='B'){
                         Bpoints--;
-                        board[position[0][0]][position[0][1]-1]=move.charAt(0)+move.charAt(1)+" A";
+                        Bposs.remove(board[position[0]][position[1]-1]);
+                        board[position[0]][position[1]-1]=move.charAt(0)+""+move.charAt(1)+" A";
+                        board[position[0]][position[1]]="0000";
+                    }
+                    else if(board[position[0]][position[1]-1]=="0000"){
+                        board[position[0]][position[1]-1]=move.charAt(0)+""+move.charAt(1)+" A";
+                        board[position[0]][position[1]]="0000";
                     }
                     else{
                         System.out.println("Please enter properly");
@@ -82,18 +116,24 @@ class test{
                     }
 
                 }
-                else if(a=="F"){
-                    if(position[0][0]==4){
+                else if(a=='B'){
+                    if(position[0]==0){
                         System.out.println("Cannot move to up as it is outside the board");
                         continue;
                     }
-                    if(board[position[0][0]+1][position[0][1]].charAt(3)=='A'){
+                    if(board[position[0]-1][position[1]].charAt(3)=='A'){
                         System.out.println("Cannot move to up as your character is already there");
                         continue;
                     }
-                    else if(board[position[0][0]+1][position[0][1]].charAt(3)=='B'){
+                    else if(board[position[0]-1][position[1]].charAt(3)=='B'){
                         Bpoints--;
-                        board[position[0][0]+1][position[0][1]]=move.charAt(0)+move.charAt(1)+" A";
+                        Bposs.remove(board[position[0]-1][position[1]]);
+                        board[position[0]-1][position[1]]=move.charAt(0)+""+move.charAt(1)+" A";
+                        board[position[0]][position[1]]="0000";
+                    }
+                    else if(board[position[0]-1][position[1]]=="0000"){
+                        board[position[0]-1][position[1]]=move.charAt(0)+""+move.charAt(1)+" A";
+                        board[position[0]][position[1]]="0000";
                     }
                     else{
                         System.out.println("Please enter properly");
@@ -101,19 +141,24 @@ class test{
                     }
 
                 }
-                else if(a=="B"){
-                    if(position[0][0]==0){
+                else if(a=='F'){
+                    if(position[0]==4){
                         System.out.println("Cannot move to down as it is outside the board");
                         continue;
                     }
-                    if(board[position[0][0]-1][position[0][0]].charAt(3)=='A'){
+                    if(board[position[0]+1][position[0]].charAt(3)=='A'){
                         System.out.println("Cannot move to right as your character is already there");
                         continue;
                     }
-                    else if(board[position[0][0]-1][position[0][1]].charAt(3)=='B'){
+                    else if(board[position[0]+1][position[1]].charAt(3)=='B'){
                         Bpoints--;
-
-                        board[position[0][0]-1][position[0][1]]=move.charAt(0)+move.charAt(1)+" A";
+                        Bposs.remove(board[position[0]+1][position[1]]);
+                        board[position[0]+1][position[1]]=move.charAt(0)+""+move.charAt(1)+" A";
+                        board[position[0]][position[1]]="0000";
+                    }
+                    else if(board[position[0]+1][position[1]]=="0000"){
+                        board[position[0]+1][position[1]]=move.charAt(0)+""+move.charAt(1)+" A";
+                        board[position[0]][position[1]]="0000";
                     }
                     else{
                         System.out.println("Please enter properly");
@@ -129,8 +174,107 @@ class test{
                 chance=2;
             }
             else if(chance==2){
-                System.out.println("Player 1 enter your move");
+                System.out.println("Player 2 enter your move");
+                String move=sc.next();
+                if(!Bposs.contains(move.charAt(0)+""+move.charAt(1)+" B")){
+                    System.out.println("Character Dead");
+                    continue;
+                }
+                char a=move.charAt(3);
+                int []position=new int[1];
+                position=pos(move,"B",board);
+                if(a=='R'){
+                    if(position[1]==4){
+                        System.out.println("Cannot move to right as it is outside the board");
+                        continue;
+                    }
+                    if(board[position[0]][position[1]+1].charAt(3)=='B'){
+                        System.out.println("Cannot move to right as your character is already there");
+                        continue;
+                    }
+                    else if(board[position[0]][position[1]+1].charAt(3)=='A'){
+                        Apoints--;
+                        Aposs.remove(board[position[0]][position[1]+1]);
+                        board[position[0]][position[1]+1]=move.charAt(0)+""+move.charAt(1)+" B";
+                        board[position[0]][position[1]]="0000";
+                    }
+                    else{
+                        System.out.println("Please enter properly");
+                        continue;
+                    }
+                }
+                else if(a=='L'){
+                    if(position[1]==0){
+                        System.out.println("Cannot move to left as it is outside the board");
+                        continue;
+                    }
+                    if(board[position[0]][position[1]-1].charAt(3)=='B'){
+                        System.out.println("Cannot move to left as your character is already there");
+                        continue;
+                    }
+                    else if(board[position[0]][position[1]-1].charAt(3)=='A'){
+                        Apoints--;
+                        Aposs.remove(board[position[0]][position[1]-1]);
+                        board[position[0]][position[1]-1]=move.charAt(0)+""+move.charAt(1)+" B";
+                        board[position[0]][position[1]]="0000";
+                    }
+                    else{
+                        System.out.println("Please enter properly");
+                        continue;
+                    }
+
+                }
+                else if(a=='F'){
+                    if(position[0]==0){
+                        System.out.println("Cannot move to up as it is outside the board");
+                        continue;
+                    }
+                    if(board[position[0]-1][position[1]].charAt(3)=='B'){
+                        System.out.println("Cannot move to up as your character is already there");
+                        continue;
+                    }
+                    else if(board[position[0]-1][position[1]].charAt(3)=='A'){
+                        Apoints--;
+                        Aposs.remove(board[position[0]+1][position[1]]);
+                        board[position[0]-1][position[1]]=move.charAt(0)+""+move.charAt(1)+" B";
+                        board[position[0]][position[1]]="0000";
+                    }
+                    else{
+                        System.out.println("Please enter properly");
+                        continue;
+                    }
+
+                }
+                else if(a=='B'){
+                    if(position[0]==4){
+                        System.out.println("Cannot move to down as it is outside the board");
+                        continue;
+                    }
+                    if(board[position[0]+1][position[0]].charAt(3)=='B'){
+                        System.out.println("Cannot move to right as your character is already there");
+                        continue;
+                    }
+                    else if(board[position[0]+1][position[1]].charAt(3)=='A'){
+                        Apoints--;
+                        Aposs.remove(board[position[0]+1][position[1]]);
+                        board[position[0]+1][position[1]]=move.charAt(0)+""+move.charAt(1)+" B";
+                        board[position[0]][position[1]]="0000";
+                    }
+                    else{
+                        System.out.println("Please enter properly");
+                        continue;
+                    }
+
+                }
+                else{
+                    System.out.println("Wrong input please enter again");
+                    continue;
+                }
                 chance=1;
+
+            }
+            if(Apoints==0||Bpoints==0){
+                break;
             }
         }
         
