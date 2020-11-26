@@ -18,6 +18,6 @@ class test{
             System.out.println();
         }
         while
-        //for(int i=0)
+        
     }
 }
